@@ -3,3 +3,4 @@ public class Main {
 
     }
 }
+git remote remove origin
