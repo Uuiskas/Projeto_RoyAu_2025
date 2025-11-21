@@ -55,4 +55,11 @@ public class Agendamento {
     public void cancelar() {
         this.status = StatusAgendamento.CANCELADO;
     }
+
+    public void exibirAgendamento() {
+
+    }
+
+    public void setStatus(StatusAgendamento statusAgendamento) {
+    }
 }
