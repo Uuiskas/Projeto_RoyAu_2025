@@ -22,7 +22,7 @@ public class Pet {
 
     private Tutor tutor;
 
-    private List<Servico> historico;
+    private List<Agendamento> historico;
 
     public Pet(String nome, String raca, int idade, Porte porte, Comportamento comportamento, TipoPelo tipoPelo, Tutor tutor){
         this.id = contador++;
@@ -60,11 +60,11 @@ public class Pet {
     public Tutor getTutor(){
         return tutor;
     }
-    public List<Servico> getHistorico(){
+    public List<Agendamento> getHistorico() {
         return historico;
     }
-    public void adicionarHistorico(Servico servico){
-        historico.add(servico);
+    public void adicionarHistorico(Agendamento agendamento) {
+        historico.add(agendamento);
     }
 
 

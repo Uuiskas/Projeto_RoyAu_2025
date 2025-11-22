@@ -14,6 +14,7 @@ public class Agendamento {
     private Servico servico;
     private LocalDateTime horario;
     private StatusAgendamento status;
+    private double precoFinal;
 
     public Agendamento(Pet pet, Tutor tutor, Servico servico, LocalDateTime horario) {
         this.id = contador++;
@@ -61,5 +62,13 @@ public class Agendamento {
     }
 
     public void setStatus(StatusAgendamento statusAgendamento) {
+    }
+
+    public double getPrecoFinal() {
+        return precoFinal;
+    }
+
+    public void setPrecoFinal(double precoFinal){
+        this.precoFinal = precoFinal;
     }
 }

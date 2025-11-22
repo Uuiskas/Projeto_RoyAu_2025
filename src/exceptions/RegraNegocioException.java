@@ -1,7 +1,7 @@
 package exceptions;
 
-public class RegraNegocioException extends Throwable {
-    public RegraNegocioException(String s) {
-
+public class RegraNegocioException extends RuntimeException {
+    public RegraNegocioException(String message) {
+        super(message);
     }
 }
