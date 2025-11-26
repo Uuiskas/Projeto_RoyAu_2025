@@ -46,10 +46,6 @@ public class Main {
             sc.nextLine();
 
             switch (opcao) {
-
-                // ----------------------------------------------------
-                // 1 - CADASTRAR TUTOR
-                // ----------------------------------------------------
                 case 1 -> {
                     System.out.print("Nome do Tutor: ");
                     String nome = sc.nextLine();
@@ -66,9 +62,6 @@ public class Main {
                     }
                 }
 
-                // ----------------------------------------------------
-                // 2 - CADASTRAR PET
-                // ----------------------------------------------------
                 case 2 -> {
                     System.out.print("Nome do Pet: ");
                     String nome = sc.nextLine();
@@ -111,17 +104,12 @@ public class Main {
                     }
                 }
 
-                // ----------------------------------------------------
-                // 3 - LISTAR SERVIÇOS
-                // ----------------------------------------------------
+
                 case 3 -> {
                     System.out.println("=== SERVIÇOS DISPONÍVEIS ===");
                     servicoController.listarServicos();
                 }
 
-                // ----------------------------------------------------
-                // 4 - AGENDAR SERVIÇO
-                // ----------------------------------------------------
                 case 4 -> {
                     try {
                         System.out.print("ID do Pet: ");
@@ -133,7 +121,7 @@ public class Main {
                             break;
                         }
 
-                        Tutor tutor = pet.getTutor(); // tutor vem do próprio Pet
+                        Tutor tutor = pet.getTutor();
 
                         System.out.print("ID do Serviço: ");
                         int idServ = sc.nextInt();
@@ -144,7 +132,6 @@ public class Main {
                             break;
                         }
 
-                        // Horário automático
                         LocalDateTime horario = LocalDateTime.now().plusMinutes(1);
 
                         Agendamento novo = new Agendamento(pet, tutor, servico, horario);
@@ -157,9 +144,7 @@ public class Main {
                     }
                 }
 
-                // ----------------------------------------------------
-                // 5 - FINALIZAR AGENDAMENTO
-                // ----------------------------------------------------
+
                 case 5 -> {
                     System.out.print("ID do Agendamento: ");
                     int idAg = sc.nextInt();
@@ -171,9 +156,6 @@ public class Main {
                     }
                 }
 
-                // ----------------------------------------------------
-                // 6 - LISTAR AGENDAMENTOS
-                // ----------------------------------------------------
                 case 6 -> agendamentoController.listarTodos();
 
                 case 0 -> System.out.println("Saindo do sistema...");
