@@ -6,7 +6,7 @@ public class ServicoRepository extends GenericRepository<Servico> {
 
     private static ServicoRepository INSTANCIA;
 
-    private ServicoRepository() {}
+    private ServicoRepository() {} // Construtor privado
 
     public static ServicoRepository getInstancia() {
         if (INSTANCIA == null) {
@@ -15,6 +15,7 @@ public class ServicoRepository extends GenericRepository<Servico> {
         return INSTANCIA;
     }
 
+    // Método obrigatório para a busca por ID
     @Override
     public Servico buscarPorId(int id) {
         for (Servico servico : data) {
