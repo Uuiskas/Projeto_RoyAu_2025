@@ -2,28 +2,47 @@ package model;
 
 import enums.Comportamento;
 import enums.Porte;
+import exceptions.RegraNegocioException;
 
-public class Banho extends Servico{
-    public Banho(){
-        super("Banho", 40);
+public class Banho extends Servico {
+
+
+
+    //  Armazenamos o porte no construtor para fins de inicialização do Service
+    private final Porte porteAnimal;
+
+
+
+    public Banho(String nome, double valorBase, String data, Porte porteAnimal) {
+        super(nome, valorBase, data);
+        this.porteAnimal = porteAnimal;
     }
 
+    // Método 'calcularCustoTotal' ajustado para usar o Pet (CORRETO)
     @Override
-    public double calcularPreco(Pet pet){
-        double preco = precoBase;
+    public double calcularCustoTotal(Pet pet) {
+        double custo = this.valorBase;
 
-        if (pet.getporte() == Porte.MEDIO){
-            preco +=10;
-        }else if(pet.getporte() == Porte.GRANDE){
-            preco +=20;
+        // Custo por Porte
+        if (pet.getPorte() == Porte.MEDIO){
+            custo +=10.00;
+        } else if(pet.getPorte() == Porte.GRANDE){
+            custo +=20.00;
         }
+
+        // Custo por Comportamento
 
         if(pet.getComportamento() == Comportamento.AGITADO){
-            preco += 5;
-        }else if(pet.getComportamento() == Comportamento.AGRESSIVO){
-            preco +=15;
+            custo += 5.00;
+        } else if(pet.getComportamento() == Comportamento.AGRESSIVO){
+            custo +=15.00;
         }
 
-        return preco;
+
+        if (custo <= 0) {
+            throw new RegraNegocioException("O valor final do Banho deve ser positivo.");
+        }
+
+        return custo;
     }
 }

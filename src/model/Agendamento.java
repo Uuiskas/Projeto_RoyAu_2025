@@ -8,13 +8,13 @@ public class Agendamento {
 
     private static int contador = 1;
 
-    private int id;
-    private Pet pet;
-    private Tutor tutor;
-    private Servico servico;
-    private LocalDateTime horario;
+    private final int id; // Usar final é boa prática para IDs
+    private final Pet pet;
+    private final Tutor tutor;
+    private final Servico servico;
+    private final LocalDateTime horario;
     private StatusAgendamento status;
-    private double precoFinal;
+    private double precoFinal; // Novo atributo para guardar o custo final
 
     public Agendamento(Pet pet, Tutor tutor, Servico servico, LocalDateTime horario) {
         this.id = contador++;
@@ -23,7 +23,12 @@ public class Agendamento {
         this.servico = servico;
         this.horario = horario;
         this.status = StatusAgendamento.AGENDADO;
+
+        // Inicializaremos com 0.0, pois o cálculo real acontece no Service.
+        this.precoFinal = 0.0;
     }
+
+    // --- Getters e Seters ---
 
     public int getId() {
         return id;
@@ -49,19 +54,15 @@ public class Agendamento {
         return status;
     }
 
-    public void concluir() {
-        this.status = StatusAgendamento.CONCLUIDO;
-    }
-
-    public void cancelar() {
-        this.status = StatusAgendamento.CANCELADO;
-    }
-
+    // Método de exibição
     public void exibirAgendamento() {
-
+        System.out.printf("ID: %d | Horário: %s | Status: %s\n", id, horario.toLocalTime(), status);
+        System.out.printf("  Pet: %s (Tutor: %s) | Custo Final: R$ %.2f\n",
+                pet.getNome(), tutor.getNome(), precoFinal);
     }
 
     public void setStatus(StatusAgendamento statusAgendamento) {
+        this.status = statusAgendamento;
     }
 
     public double getPrecoFinal() {

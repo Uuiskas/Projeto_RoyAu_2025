@@ -20,6 +20,21 @@ public class ServicoController {
         servicoService.listarServicos();
     }
 
+    /** Método para listar IDs e Nomes dos serviços . */
+    public void listarIDsEServicos() {
+        System.out.println("\n--- SERVIÇOS DISPONÍVEIS ---");
+        boolean encontrado = false;
+        for (Servico s : servicoService.getRepository().listar()) {
+
+            System.out.println(s);
+            encontrado = true;
+        }
+        if (!encontrado) {
+            System.out.println("Nenhum serviço cadastrado.");
+        }
+        System.out.println("----------------------------------------");
+    }
+
     public ServicoService getService() {
         return servicoService;
     }

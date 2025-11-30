@@ -1,4 +1,8 @@
 package interfaces;
 
-public class Remuneravel {
+public interface Remuneravel {
+
+    double calcularSalarioLiquido();
+
+    void aplicarBonus(double percentual);
 }

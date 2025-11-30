@@ -1,50 +1,73 @@
 package model;
 
-public class Tutor {
+import java.util.Objects;
+
+public class Tutor extends Pessoa { // Herda de Pessoa
 
     public static int contador = 1;
 
-    private int id;
-    private String nome;
-    private String telefone;
-    private int pontos;  // pontos de fidelidade
-
-    public Tutor(String nome, String telefone) {
+    private final int id;
+    private final String cpf;
+    private String endereco;
+    private int pontos;
+    public Tutor(String nome, String telefone, String cpf, String endereco) {
+        super(nome, telefone);
         this.id = contador++;
-        this.nome = nome;
-        this.telefone = telefone;
-        this.pontos = 0; // inicia com 0 pontos
+        this.cpf = cpf;
+        this.endereco = endereco;
+        this.pontos = 0;
     }
 
-    public int getId() {
-        return id;
+    // método abstrato da Superclasse Pessoa
+    @Override
+    public void identificar() {
+        System.out.println("Tutor(a) da Royal Pet: " + this.nome + " | ID: " + this.id);
     }
 
-    public String getNome() {
-        return nome;
-    }
+    // --- Getters e Setters específicos do Tutor ---
 
-    public String getTelefone() {
-        return telefone;
-    }
+    public int getId() { return id; }
+    public String getCpf() { return cpf; }
+    public String getEndereco() { return endereco; }
 
-    public int getPontos() {
-        return pontos;
-    }
+    public void setEndereco(String endereco) { this.endereco = endereco; }
 
-    public void setPontos(int pontos) {
-        this.pontos = pontos;
-    }
+    // Fidelidade ---
+
+    public int getPontos() { return pontos; }
+
+    // Método privado/interno (opcional, mas o Service usa adicionarPontos)
+    public void setPontos(int pontos) { this.pontos = pontos; }
 
     public void adicionarPontos(int quantidade) {
-        this.pontos += quantidade;
+        if (quantidade > 0) {
+            this.pontos += quantidade;
+        }
+    }
+
+    // --- Métodos de Comparação e Exibição ---
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tutor tutor = (Tutor) o;
+        return id == tutor.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
+        // Usa o getter herdado 'getNome()' para acessar 'nome'
         return "Tutor ID: " + id +
-                " | Nome: " + nome +
-                " | Telefone: " + telefone +
+                " | Nome: " + getNome() +
+                " | CPF: " + cpf +
+                " | Telefone: " + getTelefone() +
+                " | Endereço: " + endereco +
                 " | Pontos: " + pontos;
     }
 }

@@ -1,6 +1,7 @@
 package service;
 
 import enums.StatusAgendamento;
+import enums.TipoPagamento;
 import exceptions.RegraNegocioException;
 import model.Agendamento;
 import model.Pet;
@@ -9,6 +10,7 @@ import model.Tutor;
 import repository.AgendamentoRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AgendamentoService {
 
@@ -33,50 +35,25 @@ public class AgendamentoService {
         return INSTANCIA;
     }
 
-    // -------------------------------------------------------------
-    // RF004 – Agenda Inteligente: Agendar serviço
-    // -------------------------------------------------------------
-    public void agendarServico(Agendamento novo) {
+    // --- Métodos de CRUD ---
 
-        if (novo == null ||
-                novo.getHorario() == null ||
-                novo.getPet() == null ||
-                novo.getServico() == null) {
+    public void agendarServico(Agendamento novo) {
+        // ... (Lógica de agendar Servico e existe Choque de  horario)
+        if (novo == null || novo.getHorario() == null || novo.getPet() == null || novo.getServico() == null) {
             throw new RegraNegocioException("Dados do agendamento incompletos.");
         }
 
-        // Valida horário
-        if (existeChoqueDeHorario(novo.getHorario())) {
-            LocalDateTime sugestao = sugerirProximoHorario(novo.getHorario());
-            throw new RegraNegocioException(
-                    "Horário indisponível. Horário sugerido: " + sugestao);
-        }
 
-        // Ajuste: recalcular preço usando o serviço
         Servico servico = novo.getServico();
-        double precoFinal = servico.calcularPreco(novo.getPet());
+        double precoFinal = servico.calcularCustoTotal(novo.getPet());
         novo.setPrecoFinal(precoFinal);
 
         novo.setStatus(StatusAgendamento.AGENDADO);
         agendamentoRepository.salvar(novo);
     }
 
-    private boolean existeChoqueDeHorario(LocalDateTime horarioNovo) {
-        return agendamentoRepository.listar().stream()
-                .anyMatch(a -> a.getHorario().isEqual(horarioNovo));
-    }
-
-    public LocalDateTime sugerirProximoHorario(LocalDateTime horario) {
-        LocalDateTime tentativa = horario.plusMinutes(30);
-
-        while (existeChoqueDeHorario(tentativa)) {
-            tentativa = tentativa.plusMinutes(30);
-        }
-        return tentativa;
-    }
-
-    public void finalizarAgendamento(int id) {
-
+    public void finalizarAgendamento(int id, TipoPagamento pagamento) {
+        // ... (Lógica de finalização, fidelidade e ficha de pagamento)
         Agendamento ag = agendamentoRepository.buscarPorId(id);
 
         if (ag == null) {
@@ -90,25 +67,30 @@ public class AgendamentoService {
 
         ag.setStatus(StatusAgendamento.CONCLUIDO);
 
-        Pet pet = ag.getPet();
-        petService.registrarHistorico(ag);
+        // Chamada da Lógica de Fidelidade
+        tutorService.adicionarPontos(ag.getTutor().getId(), ag.getPrecoFinal());
 
+        gerarFichaPagamento(ag, pagamento);
 
-        Tutor tutor = pet.getTutor();
-        int pontos = calcularPontosDoServico(ag.getServico());
-        tutorService.adicionarPontos(tutor, pontos);
-
-        System.out.println("✔ Serviço concluído. Pontos adicionados: " + pontos);
+        System.out.println("Serviço concluído. Pontos adicionados.");
     }
 
+    private void gerarFichaPagamento(Agendamento agendamento, TipoPagamento pagamento) {
+        // ... (Lógica da Ficha de Pagamento)
+        String caixaResponsavel = (agendamento.getTutor().getId() % 2 != 0) ? "Alyere" : "Bruno";
+        double custo = agendamento.getPrecoFinal();
 
-    private int calcularPontosDoServico(Servico s) {
-        if (s.getNome().equalsIgnoreCase("Banho")) return 10;
-        if (s.getNome().equalsIgnoreCase("Tosa")) return 15;
-        return 5;
+        System.out.println("\n=============================================");
+        System.out.println("             FICHA DE PAGAMENTO RoyAu PET (ID: " + agendamento.getId() + ")");
+        System.out.println("---------------------------------------------");
+        System.out.printf("VALOR TOTAL: R$ %.2f\n", custo);
+        System.out.println("Forma de Pagamento: " + pagamento.name());
+        System.out.println("CAIXA RESPONSÁVEL: " + caixaResponsavel);
+        System.out.println("=============================================\n");
     }
 
-    public AgendamentoRepository getRepository() {
-        return agendamentoRepository;
+    // ⬅ MÉTODO: Retorna a lista para o Controller
+    public List<Agendamento> listarAgendamentos() {
+        return agendamentoRepository.listar();
     }
 }

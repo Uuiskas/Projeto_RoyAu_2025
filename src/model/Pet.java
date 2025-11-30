@@ -10,19 +10,19 @@ import enums.TipoPelo;
 public class Pet {
     private static int contador = 1;
 
-    private int id;
+    private final int id;
     private String nome;
     private String raca;
     private int idade;
 
-
+    // ... (Atributos de Enum)
     private Porte porte;
     private Comportamento comportamento;
     private TipoPelo tipoPelo;
 
     private Tutor tutor;
 
-    private List<Agendamento> historico;
+    private final List<Agendamento> historico;
 
     public Pet(String nome, String raca, int idade, Porte porte, Comportamento comportamento, TipoPelo tipoPelo, Tutor tutor){
         this.id = contador++;
@@ -36,6 +36,8 @@ public class Pet {
         this.historico = new ArrayList<>();
     }
 
+    // --- Getters e Setters ---
+
     public int getId(){
         return id;
     }
@@ -48,9 +50,12 @@ public class Pet {
     public int getIdade(){
         return idade;
     }
-    public Porte getporte(){
+
+    // método de acesso (Getter)
+    public Porte getPorte(){
         return porte;
     }
+
     public Comportamento getComportamento(){
         return comportamento;
     }
@@ -66,6 +71,4 @@ public class Pet {
     public void adicionarHistorico(Agendamento agendamento) {
         historico.add(agendamento);
     }
-
-
 }
